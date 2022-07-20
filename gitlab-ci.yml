@@ -1,0 +1,16 @@
+image: node:latest
+
+stages:
+    - test
+
+snyk_dependency_scanning:
+    stage: test
+    allow_failure: false
+    script:
+        - npm i -g snyk
+        - snyk auth $SNYK_TOKEN
+        - npm install
+        - snyk test --json | python3 main.py
+    artifacts:
+        reports:
+            dependency_scanning: snyk-gl-dependency-scanning.json
